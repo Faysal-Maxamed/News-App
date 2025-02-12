@@ -6,6 +6,7 @@
 .DS_Store
 .atom/
 .build/
+.windows/
 .buildlog/
 .history
 .svn/
@@ -31,7 +32,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+build/
 
 # Symbolication related
 app.*.symbols
@@ -43,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignore platform-specific folders
+/windows/
+/web/
+/macos/
+ /linux/
