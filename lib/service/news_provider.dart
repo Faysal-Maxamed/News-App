@@ -15,16 +15,18 @@ class NewsProvider with ChangeNotifier {
   String baseUrl =
       'https://newsapi.org/v2/top-headlines?country=us&apiKey=9e07fa330095470fab48223d9b70d2e7';
 
-  /// Function to fetch news articles
   Future<void> fetchNews() async {
+    isLoading = true;
+    notifyListeners();
 
     try {
-      final response = await http.get(Uri.parse(baseUrl));
+      final url =
+          'https://newsapi.org/v2/top-headlines?country=us&category=$_category&apiKey=9e07fa330095470fab48223d9b70d2e7';
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        // ✅ Ensure the articles list exists in response
         if (data['articles'] != null) {
           _newsArticles = (data['articles'] as List)
               .map((article) => NewsArticle.fromJson(article))
@@ -33,12 +35,18 @@ class NewsProvider with ChangeNotifier {
           _newsArticles = [];
         }
       } else {
-        throw Exception('Failed to load news');
+        print('Failed to load news: ${response.statusCode}');
       }
     } catch (error) {
       print('Error fetching news: $error');
-    } 
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void changeCategory(String category) {
+    _category = category;
+    fetchNews();
   }
 }
-
-
